@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respect prefers-reduced-motion for users who need it */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  html.text-large {
+    font-size: 18px;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-bg-dark dark:text-cream font-sans antialiased;
+  }
+
+  /* Visible focus ring for keyboard users */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-purple-soft;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-200 dark:bg-white/5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-purple-soft/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-purple-soft;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-coral text-white font-semibold px-6 py-3 rounded-xl
+           hover:bg-coral-light active:bg-coral-dark
+           transition-all duration-200 shadow-lg shadow-coral/20
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-coral/70 focus-visible:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 text-gray-700 font-medium px-6 py-3 rounded-xl
+           hover:bg-gray-200 active:bg-gray-100
+           border border-gray-200 hover:border-gray-300
+           dark:bg-white/10 dark:text-cream dark:border-white/10
+           dark:hover:bg-white/20 dark:hover:border-white/20
+           transition-all duration-200
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 dark:focus-visible:ring-white/40 focus-visible:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white border border-gray-200 rounded-2xl p-6
+           hover:bg-gray-50 transition-colors duration-200
+           dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10;
+  }
+
+  .input-field {
+    @apply w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3
+           text-gray-900 placeholder-gray-400 font-sans
+           dark:bg-white/5 dark:border-white/15 dark:text-cream dark:placeholder-white/30
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-soft/60 focus-visible:border-purple-soft/60
+           transition-all duration-200;
+  }
+
+  /* Screen-reader only utility — for visually hidden but accessible content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .sr-only.focus\:not-sr-only:focus {
+    position: fixed;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #e8eaed;
+  font-family: 'Inter', sans-serif;
+}
+
+.dark .leaflet-container {
+  background: #1a1a2e;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: #1a1a2e;
+  color: #F5F0EB;
+  border: 1px solid rgba(124, 92, 191, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.leaflet-popup-tip {
+  background: #ffffff;
+}
+
+.dark .leaflet-popup-tip {
+  background: #1a1a2e;
+}
+
+.leaflet-popup-close-button {
+  color: #374151 !important;
+}
+
+.dark .leaflet-popup-close-button {
+  color: #F5F0EB !important;
+}
+
+.chat-bubble-user {
+  @apply bg-purple-soft text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[75%] text-sm leading-relaxed;
+}
+
+.chat-bubble-bot {
+  @apply bg-gray-100 border border-gray-200 text-gray-800 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] text-sm leading-relaxed
+         dark:bg-white/10 dark:border-white/10 dark:text-cream;
+}
