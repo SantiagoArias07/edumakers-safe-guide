@@ -149,48 +149,71 @@ function MapPreviewSVG() {
   ]
 
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10" style={{ boxShadow: '0 24px 60px rgba(0,0,0,0.1)', aspectRatio: '4/3' }}>
-      {/* Map background */}
-      <div className="absolute inset-0 bg-[#e8edf2] dark:bg-[#0c0c1a]" />
+    <div className="relative rounded-2xl overflow-hidden border border-gray-200" style={{ boxShadow: '0 24px 60px rgba(0,0,0,0.1)', aspectRatio: '4/3' }}>
+      {/* Map background — always light (product mockup) */}
+      <div className="absolute inset-0" style={{ background: '#EFF2F5' }} />
 
-      {/* Grid lines (simulated map) */}
-      <svg className="absolute inset-0 w-full h-full opacity-20 dark:opacity-10" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#94a3b8" strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
+      {/* City blocks (buildings) */}
+      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        {[
+          { x: '6%',  y: '8%',  w: '16%', h: '18%' },
+          { x: '26%', y: '8%',  w: '18%', h: '13%' },
+          { x: '52%', y: '6%',  w: '20%', h: '16%' },
+          { x: '76%', y: '10%', w: '16%', h: '14%' },
+          { x: '6%',  y: '38%', w: '14%', h: '16%' },
+          { x: '26%', y: '36%', w: '18%', h: '18%' },
+          { x: '52%', y: '38%', w: '16%', h: '14%' },
+          { x: '72%', y: '36%', w: '20%', h: '16%' },
+          { x: '6%',  y: '64%', w: '18%', h: '20%' },
+          { x: '30%', y: '66%', w: '16%', h: '18%' },
+          { x: '52%', y: '64%', w: '20%', h: '22%' },
+          { x: '76%', y: '66%', w: '16%', h: '18%' },
+        ].map((b, i) => (
+          <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill="#D6DCE4" rx="3" />
+        ))}
       </svg>
 
-      {/* "Roads" */}
+      {/* Roads */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <path d="M 0 50% L 100% 50%" stroke="#cbd5e1" strokeWidth="1.5" fill="none" className="dark:stroke-white/10" />
-        <path d="M 50% 0 L 50% 100%" stroke="#cbd5e1" strokeWidth="1.5" fill="none" className="dark:stroke-white/10" />
-        <path d="M 20% 0 L 80% 100%" stroke="#e2e8f0" strokeWidth="1" fill="none" className="dark:stroke-white/5" />
-        <path d="M 0 30% Q 40% 40% 100% 60%" stroke="#e2e8f0" strokeWidth="1" fill="none" className="dark:stroke-white/5" />
+        {/* Primary horizontal */}
+        <rect x="0" y="30%" width="100%" height="4.5%" fill="white" />
+        <rect x="0" y="58%" width="100%" height="4%" fill="white" />
+        {/* Primary vertical */}
+        <rect x="22%" y="0" width="3%" height="100%" fill="white" />
+        <rect x="47%" y="0" width="3%" height="100%" fill="white" />
+        <rect x="70%" y="0" width="3%" height="100%" fill="white" />
+        {/* Road center lines */}
+        <line x1="0" y1="32.2%" x2="100%" y2="32.2%" stroke="#C8D0DA" strokeWidth="1" strokeDasharray="8 6" />
+        <line x1="0" y1="60%" x2="100%" y2="60%" stroke="#C8D0DA" strokeWidth="1" strokeDasharray="8 6" />
+        <line x1="23.5%" y1="0" x2="23.5%" y2="100%" stroke="#C8D0DA" strokeWidth="1" strokeDasharray="8 6" />
+        <line x1="48.5%" y1="0" x2="48.5%" y2="100%" stroke="#C8D0DA" strokeWidth="1" strokeDasharray="8 6" />
+        <line x1="71.5%" y1="0" x2="71.5%" y2="100%" stroke="#C8D0DA" strokeWidth="1" strokeDasharray="8 6" />
+        {/* Secondary streets */}
+        <line x1="0" y1="15%" x2="100%" y2="15%" stroke="#DDE2E8" strokeWidth="1" />
+        <line x1="0" y1="78%" x2="100%" y2="78%" stroke="#DDE2E8" strokeWidth="1" />
+        <line x1="0" y1="48%" x2="100%" y2="48%" stroke="#DDE2E8" strokeWidth="1" />
       </svg>
 
       {/* Markers */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         {dots.map((dot, i) => (
           <g key={i}>
-            <circle cx={`${dot.cx}%`} cy={`${dot.cy}%`} r={dot.r + 3} fill={dot.color} opacity="0.18" />
+            <circle cx={`${dot.cx}%`} cy={`${dot.cy}%`} r={dot.r + 4} fill={dot.color} opacity="0.15" />
             <circle cx={`${dot.cx}%`} cy={`${dot.cy}%`} r={dot.r} fill={dot.color} stroke="white" strokeWidth="2" />
           </g>
         ))}
       </svg>
 
-      {/* Selected card overlay */}
+      {/* Resource card — always light themed */}
       <div className="absolute bottom-4 left-4 right-4">
-        <div className="bg-white/95 dark:bg-ink-card/95 backdrop-blur-md rounded-xl p-3.5 border border-gray-200/80 dark:border-white/10 shadow-lg">
+        <div className="bg-white/97 backdrop-blur-md rounded-xl p-3.5 border border-gray-200/90 shadow-lg">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-lg bg-coral/15 flex items-center justify-center flex-shrink-0">
               <div className="w-3 h-3 rounded-full bg-coral" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-xs text-gray-900 dark:text-cream truncate">Casa de Acogida · Monterrey</p>
-              <p className="text-gray-400 dark:text-white/40 text-xs mt-0.5">Lun-Dom · 24hrs · (81) 2083-2000</p>
+              <p className="font-semibold text-xs text-gray-900 truncate">Casa de Acogida · Monterrey</p>
+              <p className="text-gray-500 text-xs mt-0.5">Lun-Dom · 24hrs · (81) 2083-2000</p>
             </div>
             <div className="flex-shrink-0">
               <div className="badge bg-coral/10 text-coral border-0 text-2xs">Refugio</div>

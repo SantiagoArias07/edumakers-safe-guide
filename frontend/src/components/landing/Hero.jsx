@@ -35,10 +35,10 @@ function ChatPreview() {
             <div className="w-5 h-5 rounded-md bg-purple-soft flex items-center justify-center">
               <Shield size={11} className="text-white" />
             </div>
-            <span className="text-xs font-semibold text-gray-700 dark:text-white/80">SafeGuide</span>
+            <span className="text-xs font-semibold text-gray-700">SafeGuide</span>
             <div className="flex items-center gap-1">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-2xs text-gray-400 dark:text-white/40">En línea</span>
+              <span className="text-2xs text-gray-400">En línea</span>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@ function ChatPreview() {
                 className={`px-3.5 py-2.5 rounded-xl text-xs leading-relaxed max-w-[80%] ${
                   msg.role === 'user'
                     ? 'bg-purple-soft text-white rounded-tr-sm'
-                    : 'bg-gray-100/90 dark:bg-white/10 text-gray-800 dark:text-cream rounded-tl-sm border border-gray-200/60 dark:border-white/8'
+                    : 'bg-gray-100/90 text-gray-800 rounded-tl-sm border border-gray-200/60'
                 }`}
               >
                 {msg.content}
@@ -69,10 +69,10 @@ function ChatPreview() {
         </AnimatePresence>
         {count > 0 && count < PREVIEW_MESSAGES.length && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-            <div className="px-4 py-3 rounded-xl rounded-tl-sm bg-gray-100/90 dark:bg-white/10 border border-gray-200/60 dark:border-white/8 flex gap-1.5 items-center">
-              <div className="typing-dot text-gray-400 dark:text-white/40" />
-              <div className="typing-dot text-gray-400 dark:text-white/40" />
-              <div className="typing-dot text-gray-400 dark:text-white/40" />
+            <div className="px-4 py-3 rounded-xl rounded-tl-sm bg-gray-100/90 border border-gray-200/60 flex gap-1.5 items-center">
+              <div className="typing-dot text-gray-400" />
+              <div className="typing-dot text-gray-400" />
+              <div className="typing-dot text-gray-400" />
             </div>
           </motion.div>
         )}

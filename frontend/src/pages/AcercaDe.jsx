@@ -202,8 +202,8 @@ export default function AcercaDe() {
                     href={href}
                     className="flex items-center gap-3 group"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-white/8 flex items-center justify-center flex-shrink-0">
-                      <Mail size={13} className="text-gray-400 dark:text-white/30" aria-hidden="true" />
+                    <div className="w-8 h-8 rounded-lg bg-purple-soft/10 dark:bg-purple-soft/15 flex items-center justify-center flex-shrink-0">
+                      <Mail size={13} className="text-purple-soft" aria-hidden="true" />
                     </div>
                     <span className="text-gray-600 dark:text-white/60 text-sm group-hover:text-coral transition-colors">
                       {label}
@@ -217,8 +217,8 @@ export default function AcercaDe() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-white/8 flex items-center justify-center flex-shrink-0">
-                    <Globe size={13} className="text-gray-400 dark:text-white/30" aria-hidden="true" />
+                  <div className="w-8 h-8 rounded-lg bg-purple-soft/10 dark:bg-purple-soft/15 flex items-center justify-center flex-shrink-0">
+                    <Globe size={13} className="text-purple-soft" aria-hidden="true" />
                   </div>
                   <span className="text-gray-600 dark:text-white/60 text-sm group-hover:text-coral transition-colors flex items-center gap-1">
                     gacetaehe.tec.mx

@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+// En dev usa el proxy de Vite (/api → localhost:8000)
+// En producción usa VITE_API_URL (la URL de Railway)
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL ?? '/api',
   headers: { 'Content-Type': 'application/json' },
 })
 
