@@ -13,8 +13,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Parse CORS origins — strip whitespace and accidental quotes from env var editors
 _raw_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
-CORS_ORIGINS = [o.strip() for o in _raw_origins.split(",")]
+CORS_ORIGINS = [o.strip().strip("\"'") for o in _raw_origins.split(",") if o.strip()]
+
+print(f"[SafeGuide] CORS origins loaded: {CORS_ORIGINS}", flush=True)
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,12 +25,14 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
 @app.on_event("startup")
 def startup():
     create_tables()
+    print(f"[SafeGuide] Startup complete. Allowing origins: {CORS_ORIGINS}", flush=True)
 
 
 app.include_router(auth.router)
@@ -42,4 +47,4 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"status": "healthy"}
+    return {"status": "healthy", "cors_origins": CORS_ORIGINS}
