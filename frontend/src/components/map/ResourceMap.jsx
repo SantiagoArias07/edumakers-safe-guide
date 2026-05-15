@@ -1,12 +1,9 @@
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, CircleMarker, useMap } from 'react-leaflet'
 import { useEffect } from 'react'
-import L from 'leaflet'
 import { useTheme } from '../../context/ThemeContext'
 
-// Fix Leaflet default icon 404 errors in Vite production builds
-// (Leaflet tries to load default marker images that don't exist in the built bundle)
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({ iconRetinaUrl: null, iconUrl: null, shadowUrl: null })
+// Note: Using CircleMarker instead of Marker+divIcon to avoid
+// Leaflet's default icon initialization issues in Vite production builds.
 
 const TYPE_COLORS = {
   refugio:     '#E8705A',
@@ -14,17 +11,6 @@ const TYPE_COLORS = {
   psicologico: '#3B82F6',
   denuncia:    '#EF4444',
   salud:       '#10B981',
-}
-
-function createIcon(color, isSelected) {
-  const size = isSelected ? 22 : 13
-  const ring = isSelected ? `, 0 0 0 7px ${color}22` : ''
-  return L.divIcon({
-    className: '',
-    html: `<div style="width:${size}px;height:${size}px;background:${color};border:${isSelected ? 3 : 2}px solid white;border-radius:50%;box-shadow:0 2px 12px ${color}80${ring};transition:all 0.25s ease;cursor:pointer;"></div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-  })
 }
 
 function FlyToCity({ city, resources }) {
@@ -60,13 +46,21 @@ export default function ResourceMap({ resources, focusCity, selectedId, onSelect
       <TileLayer url={tileUrl} attribution={tileAttr} />
       <FlyToCity city={focusCity} resources={resources} />
       <FlyToSelected resource={selectedResource} />
+
       {resources.map(resource => {
         const color = TYPE_COLORS[resource.type] || '#7C5CBF'
+        const isSelected = resource.id === selectedId
         return (
-          <Marker
+          <CircleMarker
             key={resource.id}
-            position={[resource.lat, resource.lng]}
-            icon={createIcon(color, resource.id === selectedId)}
+            center={[resource.lat, resource.lng]}
+            radius={isSelected ? 12 : 7}
+            pathOptions={{
+              color: 'white',
+              fillColor: color,
+              fillOpacity: isSelected ? 1 : 0.85,
+              weight: isSelected ? 3 : 2,
+            }}
             eventHandlers={{ click: () => onSelect(resource) }}
           />
         )
