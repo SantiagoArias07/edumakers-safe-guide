@@ -232,8 +232,6 @@ python seed_demo.py
 DATABASE_URL=postgresql://user:pass@host:port/db python seed_demo.py
 ```
 
-Demo credentials: `santiago@safeguide.demo` / `SafeGuide2026`
-
 ---
 
 ## Environment variables
