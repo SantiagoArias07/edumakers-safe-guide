@@ -8,7 +8,22 @@ Confidential AI guidance, a verified resource map, and a specialist assistant fo
 
 ## Preview
 
-> Screenshots — Landing · Chat · Resource Map
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/61969240-83d1-4a36-88f9-2cb998d62078"        
+  width="48%" alt="Home" />       
+    <img src="https://github.com/user-attachments/assets/0aba7a6e-b432-4ab1-b122-9e6b71682e57" 
+  width="48%" alt="Chat" />         
+    <br/><br/>                       
+    <img src="https://github.com/user-attachments/assets/d4da3e0e-4866-4a1f-8301-623475628180"        
+  width="48%" alt="Map" />         
+    <img src="https://github.com/user-attachments/assets/6b262bf9-6be5-4baa-9835-9780d71ad107" 
+  width="48%" alt="About1" />          
+    <br/><br/>
+    <img src="https://github.com/user-attachments/assets/668db048-3f2a-431c-9841-1364448f251c"        
+  width="48%" alt="About2" />         
+    <img src="https://github.com/user-attachments/assets/10de3c56-a6c1-47fe-bef7-064765a4ac4c" 
+  width="48%" alt="Profile" />
+  </div>
 
 ---
 
