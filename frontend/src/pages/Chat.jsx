@@ -6,8 +6,10 @@ import { chatApi } from '../api/chat'
 import { queryKeys } from '../api/keys'
 import ChatSidebar from '../components/chat/ChatSidebar'
 import ChatWindow from '../components/chat/ChatWindow'
+import ChatContextPanel from '../components/chat/ChatContextPanel'
 import EmergencyBanner from '../components/chat/EmergencyBanner'
-import { Menu, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { PanelLeft, X } from 'lucide-react'
 
 export default function Chat() {
   const { user } = useAuth()
@@ -43,9 +45,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (prevLoadingRef.current && !loading && user && messagesRef.current.length > 0) {
-      if (localStorage.getItem('safeguide_autosave') === 'true') {
-        doSave(messagesRef.current)
-      }
+      if (localStorage.getItem('safeguide_autosave') === 'true') doSave(messagesRef.current)
     }
     prevLoadingRef.current = loading
   }, [loading, user])
@@ -75,47 +75,91 @@ export default function Chat() {
     doSave(messagesRef.current)
   }
 
-  return (
-    <div className="flex h-screen pt-16 pb-16 md:pb-0 overflow-hidden bg-white dark:bg-bg-dark">
-      {emergency && <EmergencyBanner onDismiss={dismissEmergency} />}
+  const handleContextPrompt = (text) => {
+    sendMessage(text)
+  }
 
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="lg:hidden fixed bottom-4 left-4 z-30 w-11 h-11 bg-purple-soft rounded-full flex items-center justify-center shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-soft/50 focus:ring-offset-2"
-        aria-label={sidebarOpen ? 'Cerrar historial' : 'Abrir historial de conversaciones'}
-        aria-expanded={sidebarOpen}
-        aria-controls="chat-sidebar"
+  return (
+    <div
+      className="flex h-screen pt-16 pb-16 md:pb-0 overflow-hidden relative"
+      style={{ background: '#08080F' }}
+    >
+      {/* Emergency banner */}
+      <AnimatePresence>
+        {emergency && <EmergencyBanner onDismiss={dismissEmergency} />}
+      </AnimatePresence>
+
+      {/* ── Mobile sidebar drawer ── */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-30 lg:hidden"
+              style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+              onClick={() => setSidebarOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 420, damping: 42, mass: 0.8 }}
+              className="fixed left-0 top-16 bottom-0 z-40 lg:hidden w-72"
+              style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+            >
+              {/* Mobile close button */}
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="absolute -right-10 top-3 w-8 h-8 rounded-xl flex items-center justify-center text-white/50 hover:text-white transition-colors z-50"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
+                aria-label="Cerrar historial"
+              >
+                <X size={15} aria-hidden="true" />
+              </button>
+              <ChatSidebar
+                onNewChat={handleNewChat}
+                onLoadSession={handleLoadSession}
+                currentSessionId={currentSessionId}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Desktop sidebar (always visible lg+) ── */}
+      <aside
+        className="hidden lg:flex flex-col w-56 xl:w-60 flex-shrink-0"
+        aria-label="Historial de conversaciones"
       >
-        {sidebarOpen ? <X size={18} className="text-white" aria-hidden="true" /> : <Menu size={18} className="text-white" aria-hidden="true" />}
+        <ChatSidebar
+          onNewChat={handleNewChat}
+          onLoadSession={handleLoadSession}
+          currentSessionId={currentSessionId}
+        />
+      </aside>
+
+      {/* ── Mobile toggle button (only on mobile) ── */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="lg:hidden fixed bottom-20 left-4 z-20 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150"
+        style={{
+          background: 'rgba(124,92,191,0.2)',
+          border: '1px solid rgba(124,92,191,0.3)',
+          backdropFilter: 'blur(8px)',
+        }}
+        aria-label="Abrir historial de conversaciones"
+        aria-expanded={sidebarOpen}
+        aria-controls="mobile-sidebar"
+      >
+        <PanelLeft size={16} className="text-purple-light" aria-hidden="true" />
       </button>
 
-      <div
-        id="chat-sidebar"
-        className={`
-          fixed lg:relative inset-y-0 left-0 z-20 pt-16 lg:pt-0
-          transform transition-transform duration-200
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}
-        aria-hidden={!sidebarOpen && window.innerWidth < 1024}
-      >
-        <div className="h-full">
-          <ChatSidebar
-            onNewChat={handleNewChat}
-            onLoadSession={handleLoadSession}
-            currentMessages={messages}
-          />
-        </div>
-      </div>
-
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-10 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
-        />
-      )}
-
-      <main id="main-content" className="flex-1 min-w-0 h-full">
+      {/* ── Main chat ── */}
+      <main id="main-content" className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <ChatWindow
           messages={messages}
           loading={loading}
@@ -124,6 +168,9 @@ export default function Chat() {
           isSaved={!!currentSessionId}
         />
       </main>
+
+      {/* ── Right context panel (xl+) ── */}
+      <ChatContextPanel onSendPrompt={handleContextPrompt} />
     </div>
   )
 }

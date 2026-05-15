@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Shield, MessageCircle, MapPin, Lock, Eye, Scale, ArrowRight } from 'lucide-react'
+import { TiltCard } from '../ui/TiltCard'
 
 /* ── AI Assistant showcase ─────────────────────────────────── */
 const AI_FEATURES = [
@@ -18,13 +19,20 @@ function AISection({ navigate }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-          {/* Preview: conversation */}
+          {/* Preview: conversation with 3D tilt */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
           >
+            <div className="relative">
+              <div
+                className="absolute -inset-10 pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse 60% 50% at 40% 50%, rgba(124,92,191,0.15), transparent 75%)' }}
+                aria-hidden="true"
+              />
+            <TiltCard maxTilt={5} glowRgb="124,92,191" className="rounded-2xl">
             <div
               className="rounded-2xl overflow-hidden border border-white/8"
               style={{ background: '#0E0E1C', boxShadow: '0 0 0 1px rgba(255,255,255,0.04), 0 24px 60px rgba(0,0,0,0.4)' }}
@@ -71,6 +79,8 @@ function AISection({ navigate }) {
                   </motion.div>
                 ))}
               </div>
+            </div>
+            </TiltCard>
             </div>
           </motion.div>
 

@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, MapPin, Shield, Lock, Sparkles } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { TiltCard } from '../ui/TiltCard'
 
 /* ── Animated chat preview ─────────────────────────────────── */
 const PREVIEW_MESSAGES = [
@@ -178,14 +179,24 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right: Animated chat preview */}
+          {/* Right: Animated chat preview — 3D tilt */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="lg:pl-6"
           >
-            <ChatPreview />
+            {/* Ambient glow behind the card */}
+            <div className="relative">
+              <div
+                className="absolute -inset-8 rounded-3xl pointer-events-none"
+                style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,92,191,0.12), transparent 80%)' }}
+                aria-hidden="true"
+              />
+              <TiltCard maxTilt={6} glowRgb="124,92,191" className="rounded-2xl">
+                <ChatPreview />
+              </TiltCard>
+            </div>
           </motion.div>
 
         </div>
