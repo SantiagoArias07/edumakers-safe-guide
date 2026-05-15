@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } fr
  * Wraps children in a 3D tilt card with mouse-tracked rotation,
  * dynamic glow, and spring physics. Degrades gracefully on touch.
  */
-export function TiltCard({ children, className = '', maxTilt = 7, glowRgb = '124,92,191', springConfig = { stiffness: 380, damping: 36, mass: 0.5 } }) {
+export function TiltCard({ children, className = '', maxTilt = 12, glowRgb = '124,92,191', springConfig = { stiffness: 320, damping: 28, mass: 0.6 } }) {
   const ref = useRef(null)
 
   const rawX = useMotionValue(0)
@@ -26,7 +26,7 @@ export function TiltCard({ children, className = '', maxTilt = 7, glowRgb = '124
     rawX.set((e.clientX - rect.left) / rect.width - 0.5)
     rawY.set((e.clientY - rect.top) / rect.height - 0.5)
     glowOpacity.set(1)
-    scale.set(1.018)
+    scale.set(1.028)
   }, [rawX, rawY, glowOpacity, scale])
 
   const onMouseLeave = useCallback(() => {

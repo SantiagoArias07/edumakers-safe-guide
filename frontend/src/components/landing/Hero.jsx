@@ -1,19 +1,17 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, MapPin, Shield, Lock, Sparkles } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { TiltCard } from '../ui/TiltCard'
 
-/* ── Animated chat preview ─────────────────────────────────── */
 const PREVIEW_MESSAGES = [
   { role: 'assistant', content: 'Hola. Este es un espacio seguro y confidencial. ¿Qué está pasando?' },
-  { role: 'user', content: 'Me cuesta mucho pedir ayuda. No sé por dónde empezar.' },
+  { role: 'user',      content: 'Me cuesta mucho pedir ayuda. No sé por dónde empezar.' },
   { role: 'assistant', content: 'Que estés aquí ya es el primer paso. Cuéntame, te escucho sin juzgarte.' },
 ]
 
 function ChatPreview() {
   const [count, setCount] = useState(0)
-
   useEffect(() => {
     if (count >= PREVIEW_MESSAGES.length) return
     const t = setTimeout(() => setCount(c => c + 1), count === 0 ? 600 : 1400)
@@ -69,14 +67,8 @@ function ChatPreview() {
             </motion.div>
           ))}
         </AnimatePresence>
-
-        {/* Typing indicator */}
         {count > 0 && count < PREVIEW_MESSAGES.length && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex justify-start"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
             <div className="px-4 py-3 rounded-xl rounded-tl-sm bg-gray-100/90 dark:bg-white/10 border border-gray-200/60 dark:border-white/8 flex gap-1.5 items-center">
               <div className="typing-dot text-gray-400 dark:text-white/40" />
               <div className="typing-dot text-gray-400 dark:text-white/40" />
@@ -99,25 +91,30 @@ function ChatPreview() {
   )
 }
 
-/* ── Hero ──────────────────────────────────────────────────── */
 const stagger = (i) => ({
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.65, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] },
 })
 
+const btnSpring = { type: 'spring', stiffness: 500, damping: 28 }
+
 export default function Hero() {
   const navigate = useNavigate()
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
 
   return (
-    <section className="relative bg-white dark:bg-bg-dark pt-20 pb-24 sm:pt-28 overflow-hidden">
-      {/* Subtle radial gradient */}
-      <div
+    <section ref={sectionRef} className="relative bg-white dark:bg-bg-dark pt-20 pb-24 sm:pt-28 overflow-hidden">
+      {/* Parallax gradient */}
+      <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
+          y: bgY,
           backgroundImage: `
-            radial-gradient(ellipse 70% 50% at 60% 0%, rgba(124,92,191,0.07) 0%, transparent 70%),
-            radial-gradient(ellipse 40% 30% at 100% 100%, rgba(232,112,90,0.05) 0%, transparent 70%)
+            radial-gradient(ellipse 70% 50% at 60% 0%, rgba(124,92,191,0.09) 0%, transparent 70%),
+            radial-gradient(ellipse 40% 30% at 100% 100%, rgba(232,112,90,0.06) 0%, transparent 70%)
           `,
         }}
         aria-hidden="true"
@@ -126,13 +123,18 @@ export default function Hero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-          {/* Left: Copy */}
+          {/* Left */}
           <div>
+            {/* Badge with float animation */}
             <motion.div {...stagger(0)} className="mb-6">
-              <span className="badge-purple">
+              <motion.span
+                className="badge-purple"
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+              >
                 <Shield size={11} aria-hidden="true" />
                 Espacio seguro · Confidencial · México
-              </span>
+              </motion.span>
             </motion.div>
 
             <motion.h1
@@ -146,54 +148,76 @@ export default function Hero() {
               <span className="text-purple-soft">más la necesitas.</span>
             </motion.h1>
 
-            <motion.p
-              {...stagger(2)}
-              className="text-gray-500 dark:text-white/55 text-lg leading-relaxed mb-9 max-w-lg"
-            >
+            <motion.p {...stagger(2)} className="text-gray-500 dark:text-white/55 text-lg leading-relaxed mb-9 max-w-lg">
               Guía especializada en derechos, recursos y apoyo para personas que viven situaciones de violencia o injusticia en México. Sin registro, sin juicios, disponible ahora.
             </motion.p>
 
+            {/* Animated CTA buttons */}
             <motion.div {...stagger(3)} className="flex flex-col sm:flex-row gap-3 mb-10">
-              <button onClick={() => navigate('/chat')} className="btn-primary-lg group">
+              <motion.button
+                onClick={() => navigate('/chat')}
+                className="btn-primary-lg group"
+                whileHover={{ y: -3, scale: 1.03 }}
+                whileTap={{ y: 0, scale: 0.97 }}
+                transition={btnSpring}
+              >
                 Hablar con SafeGuide
-                <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-              </button>
-              <button onClick={() => navigate('/mapa')} className="btn-secondary text-base px-7 py-3.5">
+                <motion.span
+                  animate={{ x: [0, 2, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <ArrowRight size={18} aria-hidden="true" />
+                </motion.span>
+              </motion.button>
+
+              <motion.button
+                onClick={() => navigate('/mapa')}
+                className="btn-secondary text-base px-7 py-3.5"
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ y: 0, scale: 0.98 }}
+                transition={btnSpring}
+              >
                 <MapPin size={16} aria-hidden="true" />
                 Ver recursos en mi ciudad
-              </button>
+              </motion.button>
             </motion.div>
 
+            {/* Trust indicators with stagger */}
             <motion.div {...stagger(4)} className="flex flex-wrap gap-x-6 gap-y-2.5">
               {[
-                { icon: Lock, text: '100% confidencial' },
-                { icon: Shield, text: 'Sin cuenta requerida' },
+                { icon: Lock,     text: '100% confidencial' },
+                { icon: Shield,   text: 'Sin cuenta requerida' },
                 { icon: Sparkles, text: 'IA especializada en México' },
-                { icon: MapPin, text: '200+ recursos verificados' },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-gray-400 dark:text-white/35 text-sm">
+                { icon: MapPin,   text: '200+ recursos verificados' },
+              ].map(({ icon: Icon, text }, i) => (
+                <motion.div
+                  key={text}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 + i * 0.07 }}
+                  className="flex items-center gap-1.5 text-gray-400 dark:text-white/35 text-sm"
+                >
                   <Icon size={13} className="text-purple-soft/60" aria-hidden="true" />
                   {text}
-                </div>
+                </motion.div>
               ))}
             </motion.div>
           </div>
 
-          {/* Right: Animated chat preview — 3D tilt */}
+          {/* Right: TiltCard chat preview */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="lg:pl-6"
           >
-            {/* Ambient glow behind the card */}
             <div className="relative">
               <div
                 className="absolute -inset-8 rounded-3xl pointer-events-none"
                 style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(124,92,191,0.12), transparent 80%)' }}
                 aria-hidden="true"
               />
-              <TiltCard maxTilt={6} glowRgb="124,92,191" className="rounded-2xl">
+              <TiltCard maxTilt={10} glowRgb="124,92,191" className="rounded-2xl">
                 <ChatPreview />
               </TiltCard>
             </div>
