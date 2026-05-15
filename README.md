@@ -1,109 +1,185 @@
-# SafeGuide MX
+# SafeGuide
 
-**Plataforma de orientación confidencial, recursos verificados y guía especializada con IA para personas que viven situaciones de violencia o injusticia en México.**
+Confidential AI guidance, a verified resource map, and a specialist assistant for people navigating human rights, gender-based violence, and access to justice in Mexico — built for EduMakers × Tec de Monterrey.
 
-SafeGuide MX ofrece un espacio seguro donde cualquier persona puede interactuar con un asistente de IA entrenado en derechos humanos, encontrar recursos de apoyo en un mapa interactivo, y recibir orientación práctica — sin registro requerido, sin costo, disponible ahora.
-
-> Proyecto de impacto social · Semana Dignidad 2026 · Tecnológico de Monterrey × Edumakers MX
-
-Live site → safeguide-two.vercel.app
+**Live site → [safeguide-two.vercel.app](https://safeguide-two.vercel.app)**
 
 ---
 
 ## Preview
 
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/61969240-83d1-4a36-88f9-2cb998d62078"        
-  width="48%" alt="Home" />       
-    <img src="https://github.com/user-attachments/assets/0aba7a6e-b432-4ab1-b122-9e6b71682e57" 
-  width="48%" alt="Chat" />         
-    <br/><br/>                       
-    <img src="https://github.com/user-attachments/assets/d4da3e0e-4866-4a1f-8301-623475628180"        
-  width="48%" alt="Map" />         
-    <img src="https://github.com/user-attachments/assets/6b262bf9-6be5-4baa-9835-9780d71ad107" 
-  width="48%" alt="About1" />          
-    <br/><br/>
-    <img src="https://github.com/user-attachments/assets/668db048-3f2a-431c-9841-1364448f251c"        
-  width="48%" alt="About2" />         
-    <img src="https://github.com/user-attachments/assets/10de3c56-a6c1-47fe-bef7-064765a4ac4c" 
-  width="48%" alt="Profile" />
-  </div>
+> Screenshots — Landing · Chat · Resource Map
 
 ---
 
-## Stack
+## The Project
 
-| Capa | Tecnología |
-|------|-----------|
-| Frontend | React 18 + Vite |
-| Estilos | TailwindCSS 3 |
-| Animaciones | Framer Motion |
-| Estado del servidor | TanStack Query v5 |
-| Routing | React Router v6 |
-| Mapas | React-Leaflet + Carto tiles |
-| Iconos | Lucide React |
-| Testing | Vitest + React Testing Library |
-| Backend | FastAPI (Python 3.11+) |
-| Base de datos | PostgreSQL (Railway) |
-| ORM | SQLAlchemy 2 |
-| Auth | JWT + bcrypt |
-| IA local | Ollama + llama3 |
-| IA en producción | Groq / OpenRouter |
-| Deploy frontend | Vercel |
-| Deploy backend | Railway |
+**EduMakers** is a student-led initiative at Tecnológico de Monterrey that designs accessible educational materials and tools for people with disabilities. During *Semana Tec con Sentido Humano* — a week of applied social impact projects — EduMakers presented a concrete problem: in Mexico, people facing systemic barriers (disability, gender-based violence, social exclusion) often have no reliable, single place to find orientation on their rights, access legal support, or locate nearby services. They know help exists — they just don't know where to look.
+
+SafeGuide was built as a direct response to that need: a platform that centralizes confidential guidance, verified resource data, and a trained AI assistant in one accessible, no-registration-required interface. It started as a prototype for *Semana Dignidad Humana* and grew into a fully deployed product.
+
+The result was an end-to-end full-stack application — FastAPI backend on Railway, React frontend on Vercel, PostgreSQL database, multi-provider AI — built from scratch with no templates. EduMakers plans to continue using and expanding it.
 
 ---
 
-## Características
+## What it does
 
-### Asistente IA especializado
-- Entrenado para orientación en violencia de género y derechos humanos en México
-- Validación emocional antes de dar información — nunca minimiza la situación
-- Detección automática de emergencias con banner prominente
-- Conocimiento de la Ley General de Víctimas, CAVI, fiscalías y defensores públicos
-- Funciona sin cuenta — modo anónimo completo
-- Multi-proveedor: Ollama (local), Groq o OpenRouter según entorno
+**AI assistant (SafeGuide)**
+Trained specifically for human rights, gender-based violence, and dignity-related guidance in Mexico. Validates emotionally before providing information. Detects emergency situations and surfaces a crisis banner with hotline numbers. Aware of the Ley General de Víctimas, CAVI, public defenders, and state-level processes. Works fully anonymous — no account required.
 
-### Mapa interactivo de recursos
-- 200+ recursos verificados en todo México
-- Tiles Carto premium (light/dark responsive al tema)
-- Filtros animados con layout animation de Framer Motion
-- Panel flotante glassmorphism con detalle al seleccionar recurso
-- Búsqueda por ciudad con flyTo animado
+**Interactive resource map**
+200+ verified resources across Mexico: shelters, legal aid, psychological support, reporting centers, and health services. Premium Carto tiles (light/dark responsive). Animated filter pills with Framer Motion layout transitions. Floating glassmorphism panel on resource selection. City search with smooth flyTo.
 
-### Experiencia de chat
-- Layout de 3 paneles: historial · chat · panel contextual de emergencia
-- Historial agrupado por fecha (Hoy / Ayer / Esta semana)
-- Prompts sugeridos scrollables en estado vacío
-- Blur-reveal animation en cada mensaje entrante
-- Typing dots animados (no spinner)
-- Autoguardado configurable de sesiones
+**Chat experience**
+Three-panel layout: session history · main chat · contextual emergency panel. Conversation history grouped by date. Suggested prompts on empty state. Blur-reveal message animation. Grouped sessions saved to PostgreSQL per user. Auto-save preference configurable.
 
-### Landing page
-- Hero con chat preview animado + efecto 3D tilt con tracking del mouse (`useMotionValue` + `useSpring`)
-- Secciones alternadas light/dark con ritmo visual editorial
-- Showcase de conversación real y mapa vectorial SVG
-- Motion system coherente: `whileInView`, stagger, spring transitions
+**Landing page**
+Hero with live-animated chat preview and a 3D tilt effect driven by mouse tracking (`useMotionValue + useSpring`). Alternating editorial light/dark sections. AI showcase and SVG map preview with resource card overlay. Privacy section with bold typographic statement. Emotional final CTA with emergency strip.
 
-### Accesibilidad
-- Skip navigation link, landmarks semánticos completos
-- `aria-pressed` en filtros, `aria-current` en nav, `role="alert"` en emergencias
-- `prefers-reduced-motion` suprime todas las animaciones CSS
-- Focus rings `focus-visible` en toda la app
-- Tamaño de fuente configurable (normal / grande), persistido
+**Accessibility**
+Skip navigation link. Full semantic landmarks. `aria-pressed` on filter buttons. `role="alert"` on emergency banners. `role="switch" + aria-checked` on toggles. `prefers-reduced-motion` suppresses all CSS animations. Configurable font size (normal / large). Every icon-only button has `aria-label`.
 
 ---
 
-## Setup local
+## Tech Stack
 
-### Prerequisitos
-- Node.js 18+, Python 3.11+, [Ollama](https://ollama.com)
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Frontend framework | React 18 + Vite | Fast HMR, ESM-native |
+| Styling | TailwindCSS 3 | Utility-first, dark mode via class strategy |
+| Animation | Framer Motion | Spring physics, layout animations, `AnimatePresence` |
+| Server state | TanStack Query v5 | Caching, optimistic updates, no Redux |
+| Routing | React Router v6 | Declarative, nested routes |
+| Maps | React-Leaflet + Carto tiles | Lightweight, premium tile aesthetics |
+| Icons | Lucide React | Consistent, tree-shakable |
+| Testing | Vitest + React Testing Library | Fast, co-located with Vite |
+| Backend | FastAPI (Python 3.11+) | Async, typed, auto-docs |
+| Database | PostgreSQL via Railway | Managed, auto-injected `DATABASE_URL` |
+| ORM | SQLAlchemy 2 | Works with SQLite locally, PostgreSQL in prod |
+| Auth | JWT (python-jose) + bcrypt | Stateless, 7-day tokens |
+| AI — local | Ollama + llama3 | Zero cost, full privacy in development |
+| AI — production | Groq (`llama-3.1-8b-instant`) | ~200ms latency, generous free tier |
+| Deploy frontend | Vercel | Edge CDN, automatic from `main` |
+| Deploy backend | Railway | Auto-detect Python, managed Postgres |
 
-### Instalar
+---
+
+## Design System
+
+All brand tokens are defined in `tailwind.config.js` and referenced consistently across every component.
+
+| Token | Value | Role |
+|-------|-------|------|
+| `purple-soft` | `#7C5CBF` | Primary brand — buttons, active states, AI identity |
+| `purple-dark` | `#5A3F9B` | Hover state for primary |
+| `purple-light` | `#9B7FD4` | Light-on-dark contexts |
+| `coral` | `#E8705A` | Warm CTA accent — links, secondary actions |
+| `cream` | `#F5F0EB` | Body text on dark backgrounds |
+| `bg-dark` | `#0A0A14` | Deep dark page background |
+| `ink` | `#07070F` | Section dark backgrounds (landing alternating) |
+
+Typography is set in two families: **Plus Jakarta Sans** (display headlines, `font-extrabold`, `tracking-tighter`) and **Inter** (body, UI). Both self-hosted via Google Fonts with `display=swap`.
+
+Motion uses a consistent spring system: `stiffness: 420, damping: 38` for panels; `stiffness: 320, damping: 28` for the 3D tilt effect. Section reveals use `whileInView` with 0.1s stagger between children.
+
+---
+
+## Architecture
+
+```
+dignidad/
+├── backend/
+│   ├── data/
+│   │   └── resources.json          # 200+ verified resources
+│   ├── routes/
+│   │   ├── auth.py                 # register, login, /me, update
+│   │   ├── chat.py                 # AI message endpoint + session CRUD
+│   │   └── resources.py            # resource directory with city/type filters
+│   ├── services/
+│   │   ├── auth_service.py         # JWT creation/decoding, bcrypt
+│   │   └── claude_service.py       # multi-provider AI (Ollama / Groq / OpenRouter)
+│   ├── database.py                 # SQLAlchemy models — User, Conversation
+│   ├── main.py                     # FastAPI app + CORS middleware
+│   ├── seed_demo.py                # creates demo user with 4 sample conversations
+│   ├── .env.example
+│   ├── Procfile                    # Railway: uvicorn main:app --host 0.0.0.0 --port $PORT
+│   └── requirements.txt
+└── frontend/
+    ├── public/
+    │   └── shield.svg              # favicon — purple shield matching navbar
+    ├── src/
+    │   ├── api/
+    │   │   ├── client.js           # axios instance, JWT interceptor, VITE_API_URL
+    │   │   ├── keys.js             # centralized TanStack Query key factory
+    │   │   ├── auth.js             # typed auth API functions
+    │   │   ├── chat.js             # typed chat API functions
+    │   │   └── resources.js        # typed resources API function
+    │   ├── components/
+    │   │   ├── chat/
+    │   │   │   ├── ChatWindow.jsx          # main chat area, input, prompts
+    │   │   │   ├── ChatSidebar.jsx         # session list grouped by date
+    │   │   │   ├── ChatContextPanel.jsx    # emergency numbers + quick starters
+    │   │   │   ├── ChatMessage.jsx         # bubble with blur-reveal animation
+    │   │   │   └── EmergencyBanner.jsx     # crisis alert with hotlines
+    │   │   ├── landing/
+    │   │   │   ├── Hero.jsx                # 3D tilt chat preview + CTAs
+    │   │   │   ├── StatsBand.jsx           # dark numbers band
+    │   │   │   ├── HowItWorks.jsx          # three-step editorial section
+    │   │   │   ├── FeatureShowcase.jsx     # AI convo + SVG map preview
+    │   │   │   ├── PrivacySection.jsx      # typographic dark privacy statement
+    │   │   │   └── FinalCTA.jsx            # emotional close + emergency strip
+    │   │   ├── layout/
+    │   │   │   ├── Navbar.jsx              # desktop nav, theme toggle, user avatar
+    │   │   │   ├── BottomNav.jsx           # mobile bottom tab bar
+    │   │   │   └── Footer.jsx              # links + emergency numbers
+    │   │   ├── map/
+    │   │   │   ├── ResourceMap.jsx         # Leaflet with Carto tiles + CircleMarker
+    │   │   │   ├── ResourceFilters.jsx     # animated pill filters with layoutId
+    │   │   │   └── ResourcePanel.jsx       # floating glassmorphism detail panel
+    │   │   ├── profile/
+    │   │   │   ├── AuthModal.jsx           # tabbed login/register with ARIA
+    │   │   │   └── ConversationHistory.jsx # session list with expand/delete
+    │   │   ├── router/
+    │   │   │   └── ProtectedRoute.jsx      # redirect to /perfil if not authed
+    │   │   └── ui/
+    │   │       ├── TiltCard.jsx            # 3D mouse-tracking card with spring physics
+    │   │       ├── Skeleton.jsx            # loading placeholder components
+    │   │       ├── ErrorBoundary.jsx       # React error boundary with retry
+    │   │       └── EmptyState.jsx          # empty state with icon + CTA
+    │   ├── context/
+    │   │   ├── AuthContext.jsx    # useQuery for session, useMutation for auth
+    │   │   └── ThemeContext.jsx   # dark/light toggle, persisted to localStorage
+    │   ├── hooks/
+    │   │   └── useChat.js         # useMutation for AI messages, local message state
+    │   ├── pages/
+    │   │   ├── Landing.jsx        # composes all landing sections
+    │   │   ├── Chat.jsx           # 3-panel layout manager, session logic
+    │   │   ├── MapPage.jsx        # full-viewport map with floating UI
+    │   │   ├── Profile.jsx        # auth, preferences, trusted contacts, history
+    │   │   └── AcercaDe.jsx       # about, partners, contact, events calendar
+    │   └── tests/
+    │       ├── components/        # ResourceFilters, AuthModal
+    │       ├── hooks/             # useChat
+    │       └── pages/             # ProtectedRoute
+    ├── vercel.json                # SPA rewrite rule
+    └── vite.config.js             # dev proxy + Vitest config
+```
+
+---
+
+## Running locally
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.11+
+- [Ollama](https://ollama.com) for local AI
+
+### Install
 
 ```bash
-git clone https://github.com/tu-usuario/safeguide-mx
-cd safeguide-mx
+git clone https://github.com/SantiagoArias07/safeguide
+cd safeguide
 
 # Backend
 cd backend
@@ -116,52 +192,81 @@ cd ../frontend
 npm install
 ```
 
-### Arrancar
+### Start
 
 ```bash
-# Terminal 1 — IA local
+# Terminal 1 — local AI model
 ollama serve
-ollama pull llama3     # solo la primera vez
+ollama pull llama3        # first time only
 
-# Terminal 2 — App completa
+# Terminal 2 — full app
 cd frontend
-npm run dev            # levanta backend (8000) y frontend (5173)
+npm run dev               # starts backend :8000 and frontend :5173 concurrently
 ```
 
-### Datos demo
+Open [http://localhost:5173](http://localhost:5173)
+
+### Seed demo data
 
 ```bash
 cd backend
 python seed_demo.py
-# Crea usuario Santiago con 4 conversaciones de muestra
+# → creates user "Santiago" with 4 sample conversations
 
-# Para apuntar a Railway:
+# point to Railway instead of local SQLite:
 DATABASE_URL=postgresql://user:pass@host:port/db python seed_demo.py
 ```
 
+Demo credentials: `santiago@safeguide.demo` / `SafeGuide2026`
+
 ---
 
-## Variables de entorno
+## Environment variables
 
 ### Backend (`backend/.env`)
 
-| Variable | Default | Descripción |
+| Variable | Default | Description |
 |----------|---------|-------------|
-| `DATABASE_URL` | `sqlite:///./safeguide.db` | SQLite (local) · PostgreSQL (prod) |
-| `SECRET_KEY` | _(inseguro)_ | Genera con `openssl rand -hex 32` |
+| `DATABASE_URL` | `sqlite:///./safeguide.db` | SQLite locally · PostgreSQL in production |
+| `SECRET_KEY` | _(insecure)_ | JWT signing key — generate with `openssl rand -hex 32` |
 | `AI_PROVIDER` | `ollama` | `ollama` · `groq` · `openrouter` |
-| `GROQ_API_KEY` | — | Desde [console.groq.com](https://console.groq.com) |
+| `OLLAMA_MODEL` | `llama3` | Model name for Ollama |
+| `GROQ_API_KEY` | — | From [console.groq.com](https://console.groq.com) — required when `AI_PROVIDER=groq` |
 | `GROQ_MODEL` | `llama-3.1-8b-instant` | |
-| `OPENROUTER_API_KEY` | — | Desde [openrouter.ai](https://openrouter.ai) |
-| `CORS_ORIGINS` | `http://localhost:5173` | URL(s) del frontend, separadas por coma |
+| `OPENROUTER_API_KEY` | — | From [openrouter.ai](https://openrouter.ai) — required when `AI_PROVIDER=openrouter` |
+| `CORS_ORIGINS` | `http://localhost:5173` | Comma-separated allowed origins |
 
 ### Frontend (`frontend/.env.local`)
 
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_URL` | Production backend URL (e.g. `https://your-backend.railway.app`). Omit locally — Vite proxy handles `/api → :8000`. |
+
+---
+
+## Deployment
+
+### Frontend → Vercel
+
 ```
-VITE_API_URL=https://tu-backend.railway.app
+Framework:       Vite
+Root Directory:  frontend
+Build Command:   npm run build
+Output:          dist
 ```
 
-Sin esta variable en producción, usa el proxy de Vite en desarrollo (`/api`).
+Set `VITE_API_URL` in Vercel environment variables to your Railway backend URL.
+The included `vercel.json` handles SPA client-side routing automatically.
+
+### Backend → Railway
+
+```
+Root Directory:  backend
+Start Command:   uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+
+Add a **PostgreSQL** plugin — Railway injects `DATABASE_URL` automatically.
+Required variables: `SECRET_KEY`, `AI_PROVIDER`, `GROQ_API_KEY`, `GROQ_MODEL`, `CORS_ORIGINS`.
 
 ---
 
@@ -169,119 +274,46 @@ Sin esta variable en producción, usa el proxy de Vite en desarrollo (`/api`).
 
 ```bash
 cd frontend
-npm test                # ejecutar una vez
-npm run test:watch      # modo watch
-npm run test:coverage   # reporte de cobertura
+npm test              # run once
+npm run test:watch    # watch mode
+npm run test:coverage # coverage report
 ```
 
-**23 tests** que cubren:
+**23 tests** across four suites:
 
-| Suite | Qué verifica |
-|-------|-------------|
-| `ResourceFilters` | `aria-pressed`, deselección, `onChange` |
-| `AuthModal` | Tabs, validación, login, errores, a11y |
-| `useChat` | Mensajes, detección emergencia, errores, `clearChat` |
-| `ProtectedRoute` | Render autenticado, redirect, estado loading |
+| Suite | What it covers |
+|-------|---------------|
+| `ResourceFilters` | `aria-pressed` state, deselection, `onChange` callbacks |
+| `AuthModal` | Tab switching, form validation, login flow, error display, accessibility labels |
+| `useChat` | Message state, emergency detection, error handling, `clearChat` |
+| `ProtectedRoute` | Authenticated render, unauthenticated redirect, loading state |
 
 ---
 
-## Deployment
+## Engineering decisions
 
-### Vercel (frontend)
+**TanStack Query v5** — Replaced `useEffect + setState` chains that accumulated stale-data edge cases. Centralized query keys in `src/api/keys.js` make every cache invalidation explicit. Session deletion uses optimistic updates — the sidebar reflects the change before the API confirms.
 
-```
-Framework:       Vite
-Root Directory:  frontend
-Build Command:   npm run build
-```
+**Multi-provider AI** — The `/chat/message` endpoint behaves identically regardless of which AI provider is active. `AI_PROVIDER` in the environment controls the switch between Ollama (local, zero cost), Groq (production, ~200ms), and OpenRouter (free model access). Same codebase, three deployment contexts.
 
-Variable en Vercel:
-```
-VITE_API_URL = https://tu-backend.railway.app
-```
+**3D tilt effect** — `useMotionValue + useSpring` tracks mouse position within the card container, applying `rotateX`/`rotateY` up to ±12°. `useMotionTemplate` generates a radial glow that follows the cursor dynamically. Spring config: `stiffness: 320, damping: 28`. Gracefully degrades to no effect on touch devices.
 
-### Railway (backend)
+**Accessibility as product requirement** — SafeGuide serves people in vulnerable situations. Skip link as the first focusable element. `role="alert"` on the emergency banner ensures screen readers announce it immediately. `prefers-reduced-motion` is implemented in CSS (not just JS) so it applies to transitions set in `@apply` blocks too. Every form field has a visually-associated `<label>` with correct `autoComplete` attributes.
 
-```
-Root Directory:  backend
-Start Command:   uvicorn main:app --host 0.0.0.0 --port $PORT
-```
-
-Variables en Railway:
-```
-DATABASE_URL  = (inyectado automáticamente por el plugin PostgreSQL)
-SECRET_KEY    = (openssl rand -hex 32)
-AI_PROVIDER   = groq
-GROQ_API_KEY  = gsk_...
-GROQ_MODEL    = llama-3.1-8b-instant
-CORS_ORIGINS  = https://tu-frontend.vercel.app
-```
+**SQLite → PostgreSQL** — Same `database.py` code works with both. `connect_args={"check_same_thread": False}` is only applied when the dialect is SQLite. Zero code changes between environments.
 
 ---
 
-## Decisiones de ingeniería
+## About EduMakers
 
-### TanStack Query v5
-Reemplazó los patrones `useEffect + useState` que acumulaban boilerplate y tenían edge cases de datos obsoletos. Las query keys centralizadas en `src/api/keys.js` hacen toda la invalidación explícita. La eliminación de conversaciones usa optimistic updates — el sidebar se actualiza antes de que la API confirme.
+**EduMakers** is a student-led initiative at Tecnológico de Monterrey focused on designing and prototyping accessible learning materials and tools for people with disabilities across all educational levels. Their work addresses a concrete gap in the Mexican education system: materials, evaluation processes, and institutional support are rarely designed with disability in mind, leaving many students behind before they have the chance to begin.
 
-### Auth con JWT
-Token en `localStorage`, validado contra `/auth/me` en cada sesión via `useQuery`. Un interceptor de Axios limpia el token en 401. Login/registro usan `useMutation` con `onSuccess` que puebla el cache directamente — sin fetch redundante post-auth.
+SafeGuide was developed in partnership with EduMakers as part of *Semana Tec con Sentido Humano*, aligned with UN Sustainable Development Goal 10 — Reduced Inequalities.
 
-### IA multi-proveedor
-`/chat/message` funciona igual independientemente del proveedor. `AI_PROVIDER` en env var controla si usa Ollama (local, sin costo), Groq (producción, ~200ms) u OpenRouter (múltiples modelos gratuitos). El system prompt vive en un solo lugar y es compatible con el formato `messages` de los tres.
-
-### Motion system
-Efecto 3D tilt con `useMotionValue + useSpring` (spring: stiffness 320, damping 28), ±12° de rotación, `useMotionTemplate` para glow dinámico que sigue el cursor. Secciones de landing con `whileInView + stagger`. Paneles con spring physics (`stiffness: 420, damping: 38`). `AnimatePresence` en ResourcePanel, EmergencyBanner y filtros activos.
-
-### Accesibilidad como requisito del producto
-SafeGuide sirve a personas vulnerables — accesibilidad es funcional, no decorativa. Skip link como primer elemento focusable. `aria-pressed` en filtros (toggle buttons). `role="alert"` en emergencias para anuncio inmediato. `prefers-reduced-motion` suprime todas las animaciones en CSS. `role="switch" + aria-checked` en toggles.
-
-### PostgreSQL vs SQLite
-SQLite en desarrollo (sin configuración extra). PostgreSQL en producción via Railway. `database.py` detecta el dialecto de `DATABASE_URL` y ajusta `connect_args` automáticamente — mismo código, ambos entornos.
+[edumakerstec@gmail.com](mailto:edumakerstec@gmail.com)
 
 ---
 
-## Estructura
+## License
 
-```
-dignidad/
-├── backend/
-│   ├── data/resources.json          # recursos verificados
-│   ├── routes/                      # auth, chat, resources
-│   ├── services/
-│   │   ├── auth_service.py          # JWT + bcrypt
-│   │   └── claude_service.py        # multi-provider AI
-│   ├── database.py                  # SQLAlchemy models
-│   ├── main.py                      # FastAPI + CORS
-│   ├── seed_demo.py                 # datos de demostración
-│   └── requirements.txt
-└── frontend/
-    ├── src/
-    │   ├── api/                     # client, keys, auth, chat, resources
-    │   ├── components/
-    │   │   ├── chat/                # ChatWindow, Sidebar, ContextPanel, EmergencyBanner
-    │   │   ├── landing/             # Hero, StatsBand, HowItWorks, FeatureShowcase, PrivacySection, FinalCTA
-    │   │   ├── layout/              # Navbar, BottomNav, Footer
-    │   │   ├── map/                 # ResourceMap, ResourceFilters, ResourcePanel
-    │   │   ├── profile/             # AuthModal, ConversationHistory
-    │   │   ├── router/              # ProtectedRoute
-    │   │   └── ui/                  # TiltCard, Skeleton, ErrorBoundary, EmptyState
-    │   ├── context/                 # AuthContext, ThemeContext
-    │   ├── hooks/                   # useChat
-    │   ├── pages/                   # Landing, Chat, MapPage, Profile, AcercaDe
-    │   └── tests/                   # 23 tests (Vitest + RTL)
-    ├── vercel.json
-    └── vite.config.js
-```
-
----
-
-## Créditos
-
-- **Tecnológico de Monterrey** — Semana Dignidad 2026
-- **Edumakers MX** — [edumakerstec@gmail.com](mailto:edumakerstec@gmail.com)
-- Líneas de crisis: LÍNEA VIDA 800 911 2000 · CNDH 800 715 2000 · 911
-
----
-
-*Construido por **Santiago Arias** — [taek1701@gmail.com](mailto:taek1701@gmail.com)*
+MIT — see LICENSE for details.
