@@ -1,110 +1,194 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Shield, Heart, MapPin } from 'lucide-react'
+import { ArrowRight, MapPin, Shield, Lock, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  show: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] },
-  }),
+/* ── Animated chat preview ─────────────────────────────────── */
+const PREVIEW_MESSAGES = [
+  { role: 'assistant', content: 'Hola. Este es un espacio seguro y confidencial. ¿Qué está pasando?' },
+  { role: 'user', content: 'Me cuesta mucho pedir ayuda. No sé por dónde empezar.' },
+  { role: 'assistant', content: 'Que estés aquí ya es el primer paso. Cuéntame, te escucho sin juzgarte.' },
+]
+
+function ChatPreview() {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (count >= PREVIEW_MESSAGES.length) return
+    const t = setTimeout(() => setCount(c => c + 1), count === 0 ? 600 : 1400)
+    return () => clearTimeout(t)
+  }, [count])
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden border border-white/10 bg-white dark:bg-ink-card"
+      style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)' }}
+    >
+      {/* Window chrome */}
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-white/8 bg-gray-50/80 dark:bg-white/[0.03]">
+        <div className="flex gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-red-400/70" />
+          <div className="w-3 h-3 rounded-full bg-yellow-400/70" />
+          <div className="w-3 h-3 rounded-full bg-green-400/70" />
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-md bg-purple-soft flex items-center justify-center">
+              <Shield size={11} className="text-white" />
+            </div>
+            <span className="text-xs font-semibold text-gray-700 dark:text-white/80">SafeGuide</span>
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <span className="text-2xs text-gray-400 dark:text-white/40">En línea</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="px-5 py-5 space-y-4 min-h-[220px]">
+        <AnimatePresence>
+          {PREVIEW_MESSAGES.slice(0, count).map((msg, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`px-3.5 py-2.5 rounded-xl text-xs leading-relaxed max-w-[80%] ${
+                  msg.role === 'user'
+                    ? 'bg-purple-soft text-white rounded-tr-sm'
+                    : 'bg-gray-100/90 dark:bg-white/10 text-gray-800 dark:text-cream rounded-tl-sm border border-gray-200/60 dark:border-white/8'
+                }`}
+              >
+                {msg.content}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Typing indicator */}
+        {count > 0 && count < PREVIEW_MESSAGES.length && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-start"
+          >
+            <div className="px-4 py-3 rounded-xl rounded-tl-sm bg-gray-100/90 dark:bg-white/10 border border-gray-200/60 dark:border-white/8 flex gap-1.5 items-center">
+              <div className="typing-dot text-gray-400 dark:text-white/40" />
+              <div className="typing-dot text-gray-400 dark:text-white/40" />
+              <div className="typing-dot text-gray-400 dark:text-white/40" />
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Input bar */}
+      <div className="px-4 py-3 border-t border-gray-100 dark:border-white/8 flex items-center gap-2.5">
+        <div className="flex-1 bg-gray-100 dark:bg-white/8 rounded-xl px-4 py-2.5 text-xs text-gray-400 dark:text-white/30 select-none">
+          Escribe lo que está pasando...
+        </div>
+        <div className="w-8 h-8 rounded-lg bg-purple-soft flex items-center justify-center">
+          <ArrowRight size={14} className="text-white" />
+        </div>
+      </div>
+    </div>
+  )
 }
+
+/* ── Hero ──────────────────────────────────────────────────── */
+const stagger = (i) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.65, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] },
+})
 
 export default function Hero() {
   const navigate = useNavigate()
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-gray-50 dark:bg-bg-dark">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-gray-50 to-purple-soft/5 dark:from-bg-dark dark:via-bg-dark dark:to-purple-dark/20 pointer-events-none" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-purple-soft/5 dark:bg-purple-soft/5 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-coral/5 blur-3xl pointer-events-none" />
+    <section className="relative bg-white dark:bg-bg-dark pt-20 pb-24 sm:pt-28 overflow-hidden">
+      {/* Subtle radial gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(ellipse 70% 50% at 60% 0%, rgba(124,92,191,0.07) 0%, transparent 70%),
+            radial-gradient(ellipse 40% 30% at 100% 100%, rgba(232,112,90,0.05) 0%, transparent 70%)
+          `,
+        }}
+        aria-hidden="true"
+      />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
-        {/* Badge */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0}
-          className="inline-flex items-center gap-2 bg-purple-soft/10 border border-purple-soft/20 rounded-full px-4 py-2 mb-8"
-        >
-          <Shield size={14} className="text-purple-soft" />
-          <span className="text-purple-soft text-xs font-medium">Espacio seguro y confidencial · México</span>
-        </motion.div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-        {/* Headline */}
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={1}
-          className="font-display font-extrabold text-5xl sm:text-6xl lg:text-7xl text-gray-900 dark:text-cream leading-tight mb-6"
-        >
-          No estás solo.{' '}
-          <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-soft to-coral">
-            Aquí encontrarás
-          </span>
-          <br className="hidden sm:block" />
-          ayuda real.
-        </motion.h1>
+          {/* Left: Copy */}
+          <div>
+            <motion.div {...stagger(0)} className="mb-6">
+              <span className="badge-purple">
+                <Shield size={11} aria-hidden="true" />
+                Espacio seguro · Confidencial · México
+              </span>
+            </motion.div>
 
-        {/* Subheadline */}
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={2}
-          className="text-gray-500 dark:text-white/60 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          Orientación confidencial, recursos verificados y un guía especializado para acompañarte en cada paso. Sin juicios, sin presiones.
-        </motion.p>
+            <motion.h1
+              {...stagger(1)}
+              className="font-display font-extrabold text-5xl sm:text-6xl lg:text-[3.75rem] xl:text-7xl leading-[1.04] tracking-tighter text-gray-950 dark:text-cream mb-6"
+            >
+              Orientación
+              <br />
+              real cuando
+              <br />
+              <span className="text-purple-soft">más la necesitas.</span>
+            </motion.h1>
 
-        {/* CTA buttons */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={3}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <button
-            onClick={() => navigate('/chat')}
-            className="btn-primary flex items-center gap-2 text-base px-8 py-4 group"
+            <motion.p
+              {...stagger(2)}
+              className="text-gray-500 dark:text-white/55 text-lg leading-relaxed mb-9 max-w-lg"
+            >
+              Guía especializada en derechos, recursos y apoyo para personas que viven situaciones de violencia o injusticia en México. Sin registro, sin juicios, disponible ahora.
+            </motion.p>
+
+            <motion.div {...stagger(3)} className="flex flex-col sm:flex-row gap-3 mb-10">
+              <button onClick={() => navigate('/chat')} className="btn-primary-lg group">
+                Hablar con SafeGuide
+                <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+              </button>
+              <button onClick={() => navigate('/mapa')} className="btn-secondary text-base px-7 py-3.5">
+                <MapPin size={16} aria-hidden="true" />
+                Ver recursos en mi ciudad
+              </button>
+            </motion.div>
+
+            <motion.div {...stagger(4)} className="flex flex-wrap gap-x-6 gap-y-2.5">
+              {[
+                { icon: Lock, text: '100% confidencial' },
+                { icon: Shield, text: 'Sin cuenta requerida' },
+                { icon: Sparkles, text: 'IA especializada en México' },
+                { icon: MapPin, text: '200+ recursos verificados' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-1.5 text-gray-400 dark:text-white/35 text-sm">
+                  <Icon size={13} className="text-purple-soft/60" aria-hidden="true" />
+                  {text}
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right: Animated chat preview */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:pl-6"
           >
-            Hablar con SafeGuide
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-          <button
-            onClick={() => navigate('/mapa')}
-            className="btn-secondary flex items-center gap-2 text-base"
-          >
-            <MapPin size={16} />
-            Ver recursos cercanos
-          </button>
-        </motion.div>
+            <ChatPreview />
+          </motion.div>
 
-        {/* Trust indicators */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={4}
-          className="flex flex-wrap items-center justify-center gap-6 mt-16 text-gray-400 dark:text-white/30 text-xs"
-        >
-          {[
-            { icon: Shield, text: '100% confidencial' },
-            { icon: Heart, text: 'Sin juicios' },
-            { icon: MapPin, text: 'Recursos verificados en México' },
-          ].map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-1.5">
-              <Icon size={12} className="text-purple-soft/60" />
-              <span>{text}</span>
-            </div>
-          ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

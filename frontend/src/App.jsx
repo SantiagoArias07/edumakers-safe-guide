@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import Navbar from './components/layout/Navbar'
+import BottomNav from './components/layout/BottomNav'
 import Landing from './pages/Landing'
 import Chat from './pages/Chat'
 import MapPage from './pages/MapPage'
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="/acerca" element={<AcercaDe />} />
             </Routes>
           </ErrorBoundary>
+          <BottomNav />
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>

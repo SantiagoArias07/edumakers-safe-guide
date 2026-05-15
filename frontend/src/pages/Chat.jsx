@@ -76,7 +76,7 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-screen pt-16 overflow-hidden bg-white dark:bg-bg-dark">
+    <div className="flex h-screen pt-16 pb-16 md:pb-0 overflow-hidden bg-white dark:bg-bg-dark">
       {emergency && <EmergencyBanner onDismiss={dismissEmergency} />}
 
       <button
