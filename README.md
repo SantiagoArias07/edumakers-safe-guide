@@ -2,7 +2,7 @@
 
 Confidential AI guidance, a verified resource map, and a specialist assistant for people navigating human rights, gender-based violence, and access to justice in Mexico — built for EduMakers × Tec de Monterrey.
 
-**Live site → [safeguide-two.vercel.app](https://safeguide-two.vercel.app)**
+**Live site → [safeguide-edumakers.vercel.app](https://safeguide-edumakers.vercel.app)**
 
 ---
 
