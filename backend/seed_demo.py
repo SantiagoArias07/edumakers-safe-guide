@@ -4,8 +4,8 @@ Seed script — creates demo user "Santiago" with sample conversations.
 Usage (local SQLite):
     python seed_demo.py
 
-Usage (Railway PostgreSQL):
-    DATABASE_URL=postgresql://user:pass@host:port/db python seed_demo.py
+Usage (Neon Postgres):
+    DATABASE_URL="postgresql://user:pass@host/db?sslmode=require" python seed_demo.py
 """
 import json, sys, os
 sys.path.insert(0, os.path.dirname(__file__))

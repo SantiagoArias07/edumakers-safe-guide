@@ -1,0 +1,63 @@
+# Render Blueprint for SafeGuide MX backend
+# Docs: https://render.com/docs/blueprint-spec
+#
+# This file lives at the repo root. The FastAPI app uses flat imports
+# (`from database import ...`) and the start command runs `uvicorn main:app`,
+# so the service must run from inside `backend/` — hence `rootDir: backend`.
+#
+# Secrets (sync: false) are NOT stored here. Render will prompt for them in the
+# dashboard when the blueprint is first applied. Never commit real values.
+#
+# DATABASE: hosted on Neon (https://neon.tech) — a permanent free-tier Postgres,
+# NOT Render's own Postgres (which is deleted after ~30 days on the free plan).
+# Paste the Neon connection string into DATABASE_URL in the Render dashboard.
+
+services:
+  - type: web
+    name: safeguide-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # Pin the Python version (project targets 3.11+)
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+      # Database — Neon Postgres. Paste the full connection string from the Neon
+      # dashboard (Connection Details → "Connection string", pooled). It already
+      # includes ?sslmode=require, which Neon needs. Example:
+      #   postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/safeguide?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+
+      # JWT signing key — set in dashboard. Generate with:
+      #   openssl rand -hex 32
+      - key: SECRET_KEY
+        sync: false
+
+      # AI provider configuration (production = groq)
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false                     # from https://console.groq.com
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+
+      # CORS — must include the Vercel frontend. Comma-separated, no spaces needed
+      # (main.py strips whitespace/quotes). Set the real value in the dashboard.
+      - key: CORS_ORIGINS
+        sync: false                     # e.g. https://safeguide-edumakers.vercel.app
+
+      # Backend's own public URL. Only used as the OpenRouter HTTP-Referer header,
+      # so it is OPTIONAL while AI_PROVIDER=groq. Set it once you know the URL.
+      - key: APP_URL
+        sync: false                     # e.g. https://safeguide-api.onrender.com
+
+# Intentionally OMITTED (confirmed unused in production):
+#   ANTHROPIC_API_KEY  -> not referenced anywhere in the codebase (dead var)
+#   OLLAMA_MODEL       -> only read by the ollama handler; unused when AI_PROVIDER=groq
+#   OPENROUTER_*       -> only needed if you switch AI_PROVIDER to openrouter

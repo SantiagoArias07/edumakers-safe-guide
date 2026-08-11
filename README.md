@@ -33,7 +33,7 @@ Confidential AI guidance, a verified resource map, and a specialist assistant fo
 
 SafeGuide was built as a direct response to that need: a platform that centralizes confidential guidance, verified resource data, and a trained AI assistant in one accessible, no-registration-required interface. It started as a prototype for *Semana Dignidad Humana* and grew into a fully deployed product.
 
-The result was an end-to-end full-stack application — FastAPI backend on Railway, React frontend on Vercel, PostgreSQL database, multi-provider AI — built from scratch with no templates. EduMakers plans to continue using and expanding it.
+The result was an end-to-end full-stack application — FastAPI backend on Render, React frontend on Vercel, Neon Postgres database, multi-provider AI — built from scratch with no templates. EduMakers plans to continue using and expanding it.
 
 ---
 
@@ -69,13 +69,13 @@ Skip navigation link. Full semantic landmarks. `aria-pressed` on filter buttons.
 | Icons | Lucide React | Consistent, tree-shakable |
 | Testing | Vitest + React Testing Library | Fast, co-located with Vite |
 | Backend | FastAPI (Python 3.11+) | Async, typed, auto-docs |
-| Database | PostgreSQL via Railway | Managed, auto-injected `DATABASE_URL` |
+| Database | Neon Postgres | Serverless, permanent free tier, `DATABASE_URL` |
 | ORM | SQLAlchemy 2 | Works with SQLite locally, PostgreSQL in prod |
 | Auth | JWT (python-jose) + bcrypt | Stateless, 7-day tokens |
 | AI — local | Ollama + llama3 | Zero cost, full privacy in development |
 | AI — production | Groq (`llama-3.1-8b-instant`) | ~200ms latency, generous free tier |
 | Deploy frontend | Vercel | Edge CDN, automatic from `main` |
-| Deploy backend | Railway | Auto-detect Python, managed Postgres |
+| Deploy backend | Render | Blueprint (`render.yaml`), Python runtime |
 
 ---
 
@@ -117,7 +117,7 @@ dignidad/
 │   ├── main.py                     # FastAPI app + CORS middleware
 │   ├── seed_demo.py                # creates demo user with 4 sample conversations
 │   ├── .env.example
-│   ├── Procfile                    # Railway: uvicorn main:app --host 0.0.0.0 --port $PORT
+│   ├── Procfile                    # Start command: uvicorn main:app --host 0.0.0.0 --port $PORT
 │   └── requirements.txt
 └── frontend/
     ├── public/
@@ -228,8 +228,8 @@ cd backend
 python seed_demo.py
 # → creates user "Santiago" with 4 sample conversations
 
-# point to Railway instead of local SQLite:
-DATABASE_URL=postgresql://user:pass@host:port/db python seed_demo.py
+# point to Neon Postgres instead of local SQLite:
+DATABASE_URL="postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/safeguide?sslmode=require" python seed_demo.py
 ```
 
 ---
@@ -253,7 +253,7 @@ DATABASE_URL=postgresql://user:pass@host:port/db python seed_demo.py
 
 | Variable | Description |
 |----------|-------------|
-| `VITE_API_URL` | Production backend URL (e.g. `https://your-backend.railway.app`). Omit locally — Vite proxy handles `/api → :8000`. |
+| `VITE_API_URL` | Production backend URL (e.g. `https://safeguide-api.onrender.com`). Omit locally — Vite proxy handles `/api → :8000`. |
 
 ---
 
@@ -268,18 +268,34 @@ Build Command:   npm run build
 Output:          dist
 ```
 
-Set `VITE_API_URL` in Vercel environment variables to your Railway backend URL.
+Set `VITE_API_URL` in Vercel environment variables to your Render backend URL.
 The included `vercel.json` handles SPA client-side routing automatically.
 
-### Backend → Railway
+### Database → Neon
 
-```
-Root Directory:  backend
-Start Command:   uvicorn main:app --host 0.0.0.0 --port $PORT
-```
+Create a free project at [neon.tech](https://neon.tech) and copy the pooled
+**connection string** (it ends in `?sslmode=require`). Neon's free tier is
+permanent — the compute auto-suspends when idle but the data is never deleted.
+This one string is the `DATABASE_URL` used everywhere.
 
-Add a **PostgreSQL** plugin — Railway injects `DATABASE_URL` automatically.
-Required variables: `SECRET_KEY`, `AI_PROVIDER`, `GROQ_API_KEY`, `GROQ_MODEL`, `CORS_ORIGINS`.
+### Backend → Render
+
+The repo ships a `render.yaml` [Blueprint](https://render.com/docs/blueprint-spec).
+In the Render dashboard: **New → Blueprint**, point it at this repo, and it
+provisions the web service automatically (`rootDir: backend`). Then set the
+secret env vars it prompts for:
+
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | the Neon connection string from above |
+| `SECRET_KEY` | `openssl rand -hex 32` |
+| `GROQ_API_KEY` | from [console.groq.com](https://console.groq.com) |
+| `CORS_ORIGINS` | your Vercel URL, e.g. `https://safeguide-two.vercel.app` |
+
+`AI_PROVIDER=groq` and `GROQ_MODEL` are pre-set in the Blueprint. Tables are
+created automatically on startup (`create_tables()`), so no migration step is
+needed. Note: Render's free web service cold-starts after ~15 min idle (first
+request takes ~50s), which is expected on the free plan.
 
 ---
 
@@ -313,7 +329,7 @@ npm run test:coverage # coverage report
 
 **Accessibility as product requirement** — SafeGuide serves people in vulnerable situations. Skip link as the first focusable element. `role="alert"` on the emergency banner ensures screen readers announce it immediately. `prefers-reduced-motion` is implemented in CSS (not just JS) so it applies to transitions set in `@apply` blocks too. Every form field has a visually-associated `<label>` with correct `autoComplete` attributes.
 
-**SQLite → PostgreSQL** — Same `database.py` code works with both. `connect_args={"check_same_thread": False}` is only applied when the dialect is SQLite. Zero code changes between environments.
+**SQLite → Neon Postgres** — Same `database.py` code works with both, selected purely by `DATABASE_URL`. `connect_args={"check_same_thread": False}` is applied only for SQLite; Postgres gets `pool_pre_ping=True` so idle connections dropped by Neon's auto-suspend are recycled transparently. Legacy `postgres://` strings are normalized to `postgresql://` for SQLAlchemy 2.x. Zero code changes between environments.
 
 ---
 
