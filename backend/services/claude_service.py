@@ -79,7 +79,7 @@ def _send_groq(message: str, history: list) -> dict:
             "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}"},
             json={
-                "model": os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
+                "model": os.getenv("GROQ_MODEL", "openai/gpt-oss-20b"),
                 "messages": _build_messages(message, history),
                 "max_tokens": 800,
             },
