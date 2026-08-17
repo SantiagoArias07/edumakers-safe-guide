@@ -36,7 +36,13 @@ def chat_message(data: MessageRequest):
     if not data.message.strip():
         raise HTTPException(status_code=400, detail="El mensaje no puede estar vacío")
 
-    result = send_message(data.message, data.history)
+    try:
+        result = send_message(data.message, data.history)
+    except RuntimeError as e:
+        # AI provider failed (misconfigured key, provider down, etc). Return a
+        # proper HTTPException so the response carries CORS headers and the
+        # frontend can show the real cause instead of a generic network error.
+        raise HTTPException(status_code=502, detail=str(e))
     return result
 
 
